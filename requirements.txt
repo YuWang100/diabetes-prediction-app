@@ -1,0 +1,24 @@
+# 基础环境
+numpy
+pandas
+scipy
+
+# 机器学习与建模
+scikit-learn
+xgboost
+lightgbm
+imbalanced-learn
+
+# 可解释性
+shap
+lime
+
+# 可视化
+matplotlib
+seaborn
+
+# Web 应用
+streamlit
+
+# 模型保存与加载
+joblib
