@@ -7,9 +7,24 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 import warnings
 warnings.filterwarnings('ignore')
+import matplotlib.font_manager as fm
 
-# 设置中文字体
-plt.rcParams["font.family"] = ["SimHei", "WenQuanYi Micro Hei", "Heiti TC"]
+# 设置中文字体 - 改进版本
+try:
+    # 尝试使用系统中已安装的中文字体
+    font_list = fm.findSystemFonts(fontpaths=None, fontext='ttf')
+    chinese_fonts = [f for f in font_list if any(name in f.lower() for name in ['simhei', 'microsoft yahei', 'msyh', 'simsun', 'stsong'])]
+    
+    if chinese_fonts:
+        # 使用找到的第一个中文字体
+        plt.rcParams['font.family'] = fm.FontProperties(fname=chinese_fonts[0]).get_name()
+    else:
+        # 如果没有找到中文字体，使用默认字体
+        plt.rcParams['font.family'] = ['sans-serif']
+        st.warning("未找到系统中文字体，图表中的中文可能无法正确显示")
+except:
+    plt.rcParams['font.family'] = ['sans-serif']
+
 plt.rcParams['axes.unicode_minus'] = False  # 解决负号显示问题
 
 # 页面配置
@@ -21,7 +36,7 @@ st.markdown("基于随机森林算法的糖尿病风险评估工具，仅供参�
 @st.cache_resource
 def get_model_and_data():
     # 读取数据（请确保该路径正确或改为相对路径）
-    data = pd.read_csv(r"D:\Users\31309\Desktop\diabetes.csv")
+    data = pd.read_csv("diabetes.csv")
     
     # 数据预处理 - 处理异常值
     data = data[(data['Glucose'] > 0) & (data['BloodPressure'] > 0) & 
@@ -217,4 +232,4 @@ with tab3:
 
 # 页脚信息
 st.divider()
-st.caption("⚠️ 免责声明：本工具仅作辅助参考，不构成医疗建议，请务必咨询专业医师获取诊断意见")    
+st.caption("⚠️ 免责声明：本工具仅作辅助参考，不构成医疗建议，请务必咨询专业医师获取诊断意见")
